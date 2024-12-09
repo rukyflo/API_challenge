@@ -21,7 +21,7 @@ app.config["DEBUG"] = True
 # Enruta la landing page (endpoint /)
 @app.route("/", methods=["GET"])
 def hello():
-    return "Bienvenido a la API del Team 3, equipo compuesto por: Rubén, Guillem, Genma, Bastien :)"
+    return "Bienvenido a la API del Team 5, equipo compuesto por: Rubén, Guillem, Genma, Bastien :)"
 
 
 """
