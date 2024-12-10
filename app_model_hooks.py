@@ -83,6 +83,10 @@ def retrain():  # Rutarlo al endpoint '/api/v1/retrain/', metodo GET
         model.fit(data.drop(columns=["median_house_value"]), data["median_house_value"])
         pickle.dump(model, open(path_base + "ad_model.pkl", "wb"))
 
+        with open("modelo.pkl", "rb") as f:
+            modelo = pickle.load(f)
+            print(modelo.n_features_in_)
+
         return f"Model retrained. New evaluation metric RMSE: {str(rmse)}, MAPE: {str(mape)}"
     else:
         return "<h2>New data for retrain NOT FOUND. Nothing done!</h2>"
