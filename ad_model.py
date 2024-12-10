@@ -18,8 +18,6 @@ train_set["income_cat"] = pd.cut(train_set["median_income"],
 train_set["rooms_per_house"] = train_set["total_rooms"] / train_set["households"]
 train_set["bedrooms_ratio"] = train_set["total_bedrooms"] / train_set["total_rooms"]
 
-
-
 target = "median_house_value"
 
 # Procesado de variables categóricas

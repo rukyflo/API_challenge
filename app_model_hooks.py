@@ -21,7 +21,7 @@ app.config["DEBUG"] = True
 # Enruta la landing page (endpoint /)
 @app.route("/", methods=["GET"])
 def hello():
-    return "Bienvenido a la API del Team 5, equipo compuesto por: Rubén, Guillem, Genma, Bastien :)"
+    return "Bienvenido a la API del Team 3, equipo compuesto por: Rubén, Guillem, Genma, Bastien :)"
 
 
 """
@@ -33,13 +33,11 @@ http://127.0.0.1:5000/api/v1/predict?income_cat=15&rooms_per_house=2&total_rooms
 @app.route("/api/v1/predict", methods=["GET"])
 def predict():  # Ligado al endpoint '/api/v1/predict', con el método GET
     model = pickle.load(open(path_base + "ad_model.pkl", "rb"))
-    '''
     ocean_proximity_ocean = request.args.get("ocean_proximity_<1H OCEAN", None)
     ocean_proximity_inland = request.args.get("ocean_proximity_INLAND", None)
     ocean_proximity_island = request.args.get("ocean_proximity_ISLAND", None)
     ocean_proximity_bay = request.args.get("ocean_proximity_NEAR BAY", None)
     ocean_proximity_near_ocean = request.args.get("ocean_proximity_NEAR OCEAN", None)
-    '''
     income_cat = request.args.get("income_cat", None)
     rooms_per_house = request.args.get("rooms_per_house", None)
     total_rooms = request.args.get("total_rooms", None)
