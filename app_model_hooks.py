@@ -32,7 +32,8 @@ http://127.0.0.1:5000/api/v1/predict?income_cat=15&rooms_per_house=2&total_rooms
 # Enruta la funcion al endpoint /api/v1/predict
 @app.route("/api/v1/predict", methods=["GET"])
 def predict():  # Ligado al endpoint '/api/v1/predict', con el método GET
-    model = pickle.load(open(path_base + "ad_model.pkl", "rb"))
+    #model = pickle.load(open(path_base + "ad_model.pkl", "rb"))
+    model = pickle.load(open("ad_model.pkl", "rb"))
     ocean_proximity_ocean = request.args.get("ocean_proximity_<1H OCEAN", None)
     ocean_proximity_inland = request.args.get("ocean_proximity_INLAND", None)
     ocean_proximity_island = request.args.get("ocean_proximity_ISLAND", None)
@@ -68,8 +69,10 @@ http://127.0.0.1:5000/api/v1/retrain
 @app.route("/api/v1/retrain", methods=["GET"])
 # Enruta la funcion al endpoint /api/v1/retrain
 def retrain():  # Rutarlo al endpoint '/api/v1/retrain/', metodo GET
-    if os.path.exists(path_base + "data/ejemplo_housing.csv"):
-        data = pd.read_csv(path_base + "data/ejemplo_housing.csv")
+    #if os.path.exists(path_base + "data/ejemplo_housing.csv"):
+    if os.path.exists("data/ejemplo_housing.csv"):
+        #data = pd.read_csv(path_base + "data/ejemplo_housing.csv")
+        data = pd.read_csv("data/ejemplo_housing.csv")
         data = data.drop(columns=['ocean_proximity'])
 
         X_train, X_test, y_train, y_test = train_test_split(
@@ -81,9 +84,10 @@ def retrain():  # Rutarlo al endpoint '/api/v1/retrain/', metodo GET
         rmse = np.sqrt(mean_squared_error(y_test, model.predict(X_test)))
         mape = mean_absolute_percentage_error(y_test, model.predict(X_test))
         model.fit(data.drop(columns=["median_house_value"]), data["median_house_value"])
-        pickle.dump(model, open(path_base + "ad_model.pkl", "wb"))
+        #pickle.dump(model, open(path_base + "ad_model.pkl", "wb"))
+        pickle.dump(model, open("ad_model.pkl", "wb"))
 
-        with open("modelo.pkl", "rb") as f:
+        with open("ad_model.pkl", "rb") as f:
             modelo = pickle.load(f)
             print(modelo.n_features_in_)
 
