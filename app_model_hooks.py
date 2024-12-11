@@ -35,11 +35,6 @@ http://127.0.0.1:5000/api/v1/predict?income_cat=15&rooms_per_house=2&total_rooms
 def predict():  # Ligado al endpoint '/api/v1/predict', con el método GET
     #model = pickle.load(open(path_base + "ad_model.pkl", "rb"))
     model = pickle.load(open("ad_model.pkl", "rb"))
-    ocean_proximity_ocean = request.args.get("ocean_proximity_<1H OCEAN", None)
-    ocean_proximity_inland = request.args.get("ocean_proximity_INLAND", None)
-    ocean_proximity_island = request.args.get("ocean_proximity_ISLAND", None)
-    ocean_proximity_bay = request.args.get("ocean_proximity_NEAR BAY", None)
-    ocean_proximity_near_ocean = request.args.get("ocean_proximity_NEAR OCEAN", None)
     income_cat = request.args.get("income_cat", None)
     rooms_per_house = request.args.get("rooms_per_house", None)
     total_rooms = request.args.get("total_rooms", None)
@@ -65,44 +60,6 @@ def predict():  # Ligado al endpoint '/api/v1/predict', con el método GET
 La petición de prueba sería:
 http://127.0.0.1:5000/api/v1/retrain
 """
-'''
-@app.route("/api/v1/retrain", methods=["GET"])
-# Enruta la funcion al endpoint /api/v1/retrain
-def retrain():  # Rutarlo al endpoint '/api/v1/retrain/', metodo GET
-    #if os.path.exists(path_base + "data/ejemplo_housing.csv"):
-    if os.path.exists("data/ejemplo_housing.csv"):
-        #data = pd.read_csv(path_base + "data/ejemplo_housing.csv")
-        data = pd.read_csv("data/ejemplo_housing.csv")
-        data = data.drop(columns=['ocean_proximity'])
-        
-        data["income_cat"] = pd.cut(data["median_income"],
-                               bins=[0., 1.5, 3.0, 4.5, 6., np.inf],
-                               labels=[1, 2, 3, 4, 5])
-
-        data["rooms_per_house"] = data["total_rooms"] / data["households"]
-        data["bedrooms_ratio"] = data["total_bedrooms"] / data["total_rooms"]
-
-        X_train, X_test, y_train, y_test = train_test_split(
-            data.drop(columns=["median_house_value"]), data["median_house_value"], test_size=0.20, random_state=42
-        )
-
-        model = LinearRegression()
-        model.fit(X_train, y_train)
-        rmse = np.sqrt(mean_squared_error(y_test, model.predict(X_test)))
-        mape = mean_absolute_percentage_error(y_test, model.predict(X_test))
-        model.fit(data.drop(columns=["median_house_value", "longitude", "latitude", total_bedrooms,population,households,median_income,median_house_value,"ocean_proximity"
-]), data["median_house_value"])
-        #pickle.dump(model, open(path_base + "ad_model.pkl", "wb"))
-        pickle.dump(model, open("ad_model.pkl", "wb"))
-
-        with open("ad_model.pkl", "rb") as f:
-            modelo = pickle.load(f)
-            print(modelo.n_features_in_)
-
-        return f"Model retrained. New evaluation metric RMSE: {str(rmse)}, MAPE: {str(mape)}"
-    else:
-        return "<h2>New data for retrain NOT FOUND. Nothing done!</h2>"
-'''
 
 @app.route("/api/v1/retrain", methods=["GET"])
 # Enruta la funcion al endpoint /api/v1/retrain
@@ -111,18 +68,6 @@ def retrain():  # Rutarlo al endpoint '/api/v1/retrain/', metodo GET
     if os.path.exists("data/ejemplo_housing.csv"):
         #data = pd.read_csv(path_base + "data/ejemplo_housing.csv")
         data = pd.read_csv("data/ejemplo_housing.csv")
-
-        #tenemos estas features:
-                #longitude, NO USADA
-                # latitude, NO USADA
-        # housing_median_age, USADA
-        # total_rooms, USADA Y TRANSFORMA
-            # total_bedrooms, TRANSFORMA Y DESPUES SE BORRA
-                # population, NO USADA
-            # households, TRANSFORMA Y DESPUES SE BORRA
-            # median_income, TRANSFORMA Y DESPUES SE BORRA
-        # median_house_value, USADA
-                # ocean_proximity, NO USADA
 
         #hacemos las transformaciones necesarias
         data["income_cat"] = pd.cut(data["median_income"],
@@ -151,10 +96,6 @@ def retrain():  # Rutarlo al endpoint '/api/v1/retrain/', metodo GET
         model.fit(X_train, y_train)
         rmse = np.sqrt(mean_squared_error(y_test, model.predict(X_test)))
         mape = mean_absolute_percentage_error(y_test, model.predict(X_test))
-
-        #Creo que hay que borrar esta linea de abajo
-        #model.fit(data.drop(columns=["median_house_value", "longitude", "latitude", total_bedrooms,population,households,median_income,median_house_value,"ocean_proximity"
-        #]), data["median_house_value"])
 
         #pickle.dump(model, open(path_base + "ad_model.pkl", "wb"))
         pickle.dump(model, open("ad_model.pkl", "wb"))
